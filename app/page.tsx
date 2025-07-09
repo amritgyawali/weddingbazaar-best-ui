@@ -29,6 +29,7 @@ import {
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 // Import the SearchBarClient component with SSR disabled
 const SearchBarClient = dynamic(() => import("@/components/search-bar-client"), { ssr: false })
