@@ -145,8 +145,9 @@ export default function VendorInquiriesPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="inbox">Inbox</TabsTrigger>
+            <TabsTrigger value="kanban">🗂️ Pipeline</TabsTrigger>
             <TabsTrigger value="responses">Responses</TabsTrigger>
             <TabsTrigger value="templates">Templates</TabsTrigger>
             <TabsTrigger value="automation">Automation</TabsTrigger>
@@ -319,6 +320,94 @@ export default function VendorInquiriesPage() {
                     </div>
                   </CardContent>
                 </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Kanban Pipeline */}
+          <TabsContent value="kanban" className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-600">
+                Drag inquiries through stages to track your sales pipeline
+              </p>
+              <Badge className="bg-blue-100 text-blue-700">
+                Total Pipeline Value: ₹8,45,000
+              </Badge>
+            </div>
+            <div className="grid grid-cols-5 gap-3 overflow-x-auto pb-2">
+              {[
+                {
+                  stage: "New Lead",
+                  color: "bg-blue-50 border-blue-200",
+                  headerColor: "bg-blue-100 text-blue-800",
+                  dot: "bg-blue-400",
+                  cards: [
+                    { name: "Meera & Suresh", budget: "₹90K", date: "Mar 2025", emoji: "📩" },
+                    { name: "Pooja Iyer", budget: "₹60K", date: "Apr 2025", emoji: "📩" },
+                  ],
+                },
+                {
+                  stage: "Met / Called",
+                  color: "bg-purple-50 border-purple-200",
+                  headerColor: "bg-purple-100 text-purple-800",
+                  dot: "bg-purple-400",
+                  cards: [
+                    { name: "Divya & Rohit", budget: "₹1.2L", date: "Feb 2025", emoji: "📞" },
+                  ],
+                },
+                {
+                  stage: "Proposal Sent",
+                  color: "bg-yellow-50 border-yellow-200",
+                  headerColor: "bg-yellow-100 text-yellow-800",
+                  dot: "bg-yellow-400",
+                  cards: [
+                    { name: "Anjali & Vikram", budget: "₹85K", date: "Jan 2025", emoji: "📋" },
+                    { name: "Kavya Singh", budget: "₹75K", date: "Jan 2025", emoji: "📋" },
+                  ],
+                },
+                {
+                  stage: "Contract Sent",
+                  color: "bg-orange-50 border-orange-200",
+                  headerColor: "bg-orange-100 text-orange-800",
+                  dot: "bg-orange-400",
+                  cards: [
+                    { name: "Sneha Patel", budget: "₹95K", date: "Nov 2024", emoji: "✍️" },
+                  ],
+                },
+                {
+                  stage: "Booked ✓",
+                  color: "bg-green-50 border-green-200",
+                  headerColor: "bg-green-100 text-green-800",
+                  dot: "bg-green-400",
+                  cards: [
+                    { name: "Priya & Rahul", budget: "₹95K", date: "Dec 2024", emoji: "🎉" },
+                    { name: "Kavya & Arjun", budget: "₹85K", date: "Feb 2025", emoji: "🎉" },
+                  ],
+                },
+              ].map((col) => (
+                <div key={col.stage} className={`rounded-xl border ${col.color} min-w-[180px]`}>
+                  <div className={`rounded-t-xl px-3 py-2 ${col.headerColor} flex items-center justify-between`}>
+                    <div className="flex items-center space-x-1.5">
+                      <div className={`w-2 h-2 rounded-full ${col.dot}`} />
+                      <span className="text-xs font-semibold">{col.stage}</span>
+                    </div>
+                    <span className="text-xs font-bold">{col.cards.length}</span>
+                  </div>
+                  <div className="p-2 space-y-2 min-h-[200px]">
+                    {col.cards.map((card) => (
+                      <div
+                        key={card.name}
+                        className="bg-white rounded-lg p-2.5 shadow-sm cursor-grab hover:shadow-md transition-shadow"
+                      >
+                        <p className="text-sm font-medium text-gray-800">{card.emoji} {card.name}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{card.budget} · {card.date}</p>
+                      </div>
+                    ))}
+                    <div className="border-2 border-dashed border-gray-200 rounded-lg p-2 text-center cursor-pointer hover:border-blue-300">
+                      <p className="text-xs text-gray-400">+ Drop here</p>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </TabsContent>
