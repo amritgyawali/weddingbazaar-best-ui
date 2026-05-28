@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { MessageCircle, X, Phone, ExternalLink } from "lucide-react"
 
-const WHATSAPP_NUMBER = "919999999999" // Replace with actual number
+const WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919999999999"
 const WHATSAPP_MESSAGE = encodeURIComponent(
   "Hi! I'm planning my wedding and would like help finding vendors on WeddingBazaar."
 )

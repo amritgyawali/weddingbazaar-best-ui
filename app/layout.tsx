@@ -69,6 +69,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: siteUrl,
   },
+  themeColor: '#ec4899',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'WeddingBazaar',
+  },
 }
 
 const jsonLd = {
@@ -101,17 +107,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
+      <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <meta name="theme-color" content="#ec4899" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="WeddingBazaar" />
-      </head>
-      <body>
         {children}
         <WhatsAppButton />
       </body>
