@@ -34,6 +34,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel
 } from "@/components/ui/dropdown-menu"
+import { motion, AnimatePresence } from "motion/react"
 
 interface Notification {
   id: string

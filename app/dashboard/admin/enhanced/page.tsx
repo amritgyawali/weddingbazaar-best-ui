@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AdvancedCard, AdvancedCardHeader, AdvancedCardContent, AdvancedCardTitle } from "@/components/ui/advanced-card"
@@ -8,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { EnhancedDashboardLayout } from "@/components/dashboard/enhanced-dashboard-layout"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "motion/react"
 import {
   Calendar,
   DollarSign,

@@ -50,6 +50,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from "lucide-react"
+import { motion, AnimatePresence } from "motion/react"
 
 interface MenuItem {
   label: string
@@ -404,11 +405,9 @@ export function EnhancedDashboardLayout({ children, menuItems, userRole }: Enhan
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="sm" className="lg:hidden">
-              <Menu className="h-6 w-6" />
-            </Button>
-          </SheetTrigger>
+          <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
+            <Menu className="h-6 w-6" />
+          </Button>
 
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-gray-600">
