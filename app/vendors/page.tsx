@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Star, Heart, Share2, Phone, Award, Grid, List, SlidersHorizontal } from "lucide-react"
+import { Search, Star, Heart, Share2, Phone, Award, Grid, List, SlidersHorizontal, BarChart2, Check } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -18,6 +18,7 @@ export default function VendorsPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [showFilters, setShowFilters] = useState(false)
   const [priceRange, setPriceRange] = useState([10000, 500000])
+  const [compareList, setCompareList] = useState<number[]>([])
   const [selectedCategory, setSelectedCategory] = useState(searchParams?.get("category") || "all")
   const [selectedCity, setSelectedCity] = useState(searchParams?.get("city") || "")
   const [searchQuery, setSearchQuery] = useState(searchParams?.get("query") || "")
@@ -163,6 +164,14 @@ export default function VendorsPage() {
         return 0
     }
   })
+
+  const toggleCompare = (id: number) => {
+    setCompareList((prev) => {
+      if (prev.includes(id)) return prev.filter((v) => v !== id)
+      if (prev.length >= 3) return prev
+      return [...prev, id]
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -439,6 +448,19 @@ export default function VendorsPage() {
                       <div className="flex space-x-2">
                         <Button
                           size="sm"
+                          variant={compareList.includes(vendor.id) ? "default" : "outline"}
+                          className={compareList.includes(vendor.id) ? "bg-pink-600 hover:bg-pink-700 text-white" : "border-pink-200 text-pink-600 hover:bg-pink-50"}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleCompare(vendor.id)
+                          }}
+                          disabled={!compareList.includes(vendor.id) && compareList.length >= 3}
+                          title="Add to comparison"
+                        >
+                          {compareList.includes(vendor.id) ? <Check className="w-4 h-4" /> : <BarChart2 className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          size="sm"
                           variant="outline"
                           onClick={(e) => {
                             e.stopPropagation()
@@ -473,6 +495,28 @@ export default function VendorsPage() {
           </div>
         </div>
       </div>
+
+      {/* Sticky compare bar */}
+      {compareList.length >= 2 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl px-4 py-3 flex items-center justify-between z-50">
+          <p className="text-sm font-medium text-gray-700">
+            {compareList.length} vendors selected for comparison
+          </p>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={() => setCompareList([])}>
+              Clear
+            </Button>
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white"
+              onClick={() => router.push("/compare")}
+            >
+              <BarChart2 className="w-4 h-4 mr-2" />
+              Compare Now
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

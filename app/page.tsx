@@ -446,7 +446,7 @@ export default function EnhancedWeddingBazaarHomePage() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault()
-                  router.push("/planning-tool")
+                  router.push("/recommendations")
                 }}
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -560,7 +560,7 @@ export default function EnhancedWeddingBazaarHomePage() {
             ))}
           </div>
 
-          <div className="text-center">
+          <div className="text-center flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
               className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
@@ -568,6 +568,14 @@ export default function EnhancedWeddingBazaarHomePage() {
             >
               Explore All Vendors
               <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-pink-200 text-pink-600 hover:bg-pink-50 px-8 transition-all duration-300"
+              onClick={() => router.push("/compare")}
+            >
+              Compare Vendors
             </Button>
           </div>
         </div>
