@@ -42,6 +42,14 @@ import { useRouter } from "next/navigation"
 
 const SearchBarClient = dynamic(() => import("@/components/search-bar-client"), { ssr: false })
 
+const STATS = {
+  couples: "75K+",
+  vendors: "25K+",
+  cities: "150+",
+  rating: "4.9",
+  businessGenerated: "₹150+ Crores",
+}
+
 const PARTICLES = [
   { left: "5%", top: "15%", size: "4px", delay: "0s", duration: "4s" },
   { left: "15%", top: "70%", size: "3px", delay: "1s", duration: "5s" },
@@ -338,10 +346,10 @@ export default function EnhancedWeddingBazaarHomePage() {
             <div className="animate-fade-in-up-delay-3 pt-12">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
                 {[
-                  { number: "75K+", label: "Happy Couples" },
-                  { number: "25K+", label: "Verified Vendors" },
-                  { number: "150+", label: "Cities" },
-                  { number: "4.9", label: "Average Rating", suffix: "★" },
+                  { number: STATS.couples, label: "Happy Couples" },
+                  { number: STATS.vendors, label: "Verified Vendors" },
+                  { number: STATS.cities, label: "Cities" },
+                  { number: STATS.rating, label: "Average Rating", suffix: "★" },
                 ].map((stat, index) => (
                   <div key={index} className="glass rounded-2xl px-4 py-5 text-center hover:bg-white/15 transition-all duration-300">
                     <div className="text-2xl md:text-3xl font-bold text-white">
@@ -602,8 +610,7 @@ export default function EnhancedWeddingBazaarHomePage() {
                     <Avatar className="w-12 h-12 ring-2 ring-pink-100">
                       <AvatarImage src={testimonial.image || "/placeholder.svg"} />
                       <AvatarFallback className="bg-gradient-to-br from-pink-500 to-rose-600 text-white text-sm font-bold">
-                        {testimonial.name.split(" ")[0][0]}
-                        {testimonial.name.split(" ")[2]?.[0] || ""}
+                        {testimonial.name.split(" & ").map((n) => n[0]).join("")}
                       </AvatarFallback>
                     </Avatar>
                     <div>
@@ -817,21 +824,21 @@ export default function EnhancedWeddingBazaarHomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {[
               {
-                stat: "75,000+",
+                stat: STATS.couples.replace("K+", ",000+"),
                 label: "Happy Couples",
                 description: "Found their dream vendors and created magical wedding celebrations",
                 icon: <Heart className="w-7 h-7" />,
                 color: "from-pink-500 to-rose-600",
               },
               {
-                stat: "25,000+",
+                stat: STATS.vendors.replace("K+", ",000+"),
                 label: "Verified Vendors",
                 description: "Thoroughly vetted professionals delivering exceptional service",
                 icon: <Users className="w-7 h-7" />,
                 color: "from-blue-500 to-indigo-600",
               },
               {
-                stat: "150+",
+                stat: STATS.cities,
                 label: "Cities Covered",
                 description: "Local vendors who understand regional traditions and culture",
                 icon: <MapPin className="w-7 h-7" />,
@@ -854,7 +861,7 @@ export default function EnhancedWeddingBazaarHomePage() {
 
           <div className="text-center">
             <div className="inline-flex items-center gap-4 px-8 py-5 rounded-3xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100">
-              <div className="text-3xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">₹150+ Crores</div>
+              <div className="text-3xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">{STATS.businessGenerated}</div>
               <div className="text-left">
                 <p className="text-sm font-semibold text-gray-700">Business Generated</p>
                 <p className="text-xs text-gray-400">For our vendor partners this month</p>
@@ -882,7 +889,7 @@ export default function EnhancedWeddingBazaarHomePage() {
             </span>
           </h2>
           <p className="text-lg text-gray-500 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Join 75,000+ couples who have planned their perfect celebration with WeddingBazaar. Your fairytale begins with a single click.
+            Join {STATS.couples.replace("K+", ",000+")} couples who have planned their perfect celebration with WeddingBazaar. Your fairytale begins with a single click.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -1034,7 +1041,7 @@ export default function EnhancedWeddingBazaarHomePage() {
           <div className="border-t border-white/10 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-gray-500 text-sm">
-                &copy; 2026 WeddingBazaar. All rights reserved. Made with ❤️ in India
+                &copy; {new Date().getFullYear()} WeddingBazaar. All rights reserved. Made with ❤️ in India
               </p>
               <div className="flex gap-6 text-sm">
                 <Link href="/privacy" className="text-gray-500 hover:text-pink-400 transition-colors">
