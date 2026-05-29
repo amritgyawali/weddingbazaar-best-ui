@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -260,10 +262,11 @@ export default function CustomerGuestsPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="guest-list">Guest List</TabsTrigger>
             <TabsTrigger value="rsvp">RSVP Tracking</TabsTrigger>
+            <TabsTrigger value="seating">🪑 Seating Chart</TabsTrigger>
             <TabsTrigger value="invitations">Invitations</TabsTrigger>
             <TabsTrigger value="tools">Tools</TabsTrigger>
           </TabsList>
@@ -692,6 +695,142 @@ export default function CustomerGuestsPage() {
                 <span className="text-sm font-medium">VIP Guests</span>
               </Button>
             </div>
+          </TabsContent>
+
+          {/* Seating Chart Tab */}
+          <TabsContent value="seating" className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">Drag-and-Drop Seating Chart</h3>
+                <p className="text-sm text-gray-500">Assign confirmed guests (180) to tables. Auto-synced from RSVP data.</p>
+              </div>
+              <div className="flex space-x-2">
+                <Button variant="outline" size="sm">
+                  <Download className="w-4 h-4 mr-1" />
+                  Export PDF
+                </Button>
+                <Button size="sm" className="bg-pink-500 text-white hover:bg-pink-600">
+                  <Plus className="w-4 h-4 mr-1" />
+                  Add Table
+                </Button>
+              </div>
+            </div>
+
+            {/* Stats Bar */}
+            <div className="grid grid-cols-4 gap-3">
+              {[
+                { label: "Tables", value: "18", color: "text-blue-600" },
+                { label: "Seats", value: "200", color: "text-gray-600" },
+                { label: "Assigned", value: "162", color: "text-green-600" },
+                { label: "Unassigned", value: "18", color: "text-yellow-600" },
+              ].map((s) => (
+                <Card key={s.label}>
+                  <CardContent className="p-3 text-center">
+                    <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
+                    <p className="text-xs text-gray-500">{s.label}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              {/* Unassigned Guests Panel */}
+              <Card className="lg:col-span-1">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm">Unassigned Guests</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 max-h-96 overflow-y-auto">
+                  {[
+                    "Kavya Iyer", "Rohan Mehta", "Sonia Gupta",
+                    "Arjun Patel", "Neha Sharma", "Vijay Nair",
+                    "Deepa Krishnan", "Aakash Verma",
+                  ].map((name) => (
+                    <div
+                      key={name}
+                      className="flex items-center space-x-2 p-2 bg-yellow-50 border border-yellow-200 rounded-lg cursor-grab text-sm"
+                    >
+                      <Users className="w-3 h-3 text-yellow-600 flex-shrink-0" />
+                      <span className="text-gray-700">{name}</span>
+                    </div>
+                  ))}
+                  <p className="text-xs text-gray-400 pt-2 text-center">Drag guests to tables →</p>
+                </CardContent>
+              </Card>
+
+              {/* Table Grid */}
+              <div className="lg:col-span-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {[
+                    { num: 1, name: "Sweetheart Table", capacity: 2, guests: ["Priya Sharma", "Rahul Gupta"], type: "couple" },
+                    { num: 2, name: "Family Table A", capacity: 10, guests: ["Mrs. Sharma", "Mr. Sharma", "Ravi Sharma", "Pooja S.", "Anil S.", "Sunita S."], type: "family" },
+                    { num: 3, name: "Family Table B", capacity: 10, guests: ["Mr. Gupta", "Mrs. Gupta", "Amit Gupta", "Preethi G."], type: "family" },
+                    { num: 4, name: "Friends Table", capacity: 12, guests: ["Anjali Mehta", "Vikram M.", "Sneha Patel", "Raj Patel", "Meera K.", "Suresh K."], type: "friends" },
+                    { num: 5, name: "College Friends", capacity: 10, guests: ["Divya R.", "Rohit R.", "Kiran P.", "Lakshmi V.", "Arun S."], type: "friends" },
+                    { num: 6, name: "Office Colleagues", capacity: 10, guests: ["Ms. Banerjee", "Mr. Desai", "Nisha Reddy", "Sanjay M."], type: "work" },
+                  ].map((table) => {
+                    const fillPercent = (table.guests.length / table.capacity) * 100
+                    const typeColor: Record<string, string> = {
+                      couple: "border-pink-400 bg-pink-50",
+                      family: "border-blue-300 bg-blue-50",
+                      friends: "border-green-300 bg-green-50",
+                      work: "border-purple-300 bg-purple-50",
+                    }
+                    return (
+                      <Card
+                        key={table.num}
+                        className={`border-2 ${typeColor[table.type] || "border-gray-200"} hover:shadow-md transition-shadow`}
+                      >
+                        <CardContent className="p-3">
+                          <div className="flex items-center justify-between mb-1">
+                            <p className="font-semibold text-xs text-gray-700">
+                              Table {table.num}: {table.name}
+                            </p>
+                            <span className="text-xs text-gray-500">
+                              {table.guests.length}/{table.capacity}
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-1.5 mb-2">
+                            <div
+                              className={`h-1.5 rounded-full ${fillPercent >= 90 ? "bg-red-400" : fillPercent >= 70 ? "bg-yellow-400" : "bg-green-400"}`}
+                              style={{ width: `${fillPercent}%` }}
+                            />
+                          </div>
+                          <div className="space-y-0.5 max-h-24 overflow-y-auto">
+                            {table.guests.map((g) => (
+                              <div key={g} className="flex items-center justify-between text-xs">
+                                <span className="text-gray-600">{g}</span>
+                                <Button variant="ghost" size="sm" className="h-4 w-4 p-0 text-gray-400 hover:text-red-500">
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                          {table.guests.length < table.capacity && (
+                            <div className="mt-2 border-t border-dashed border-gray-300 pt-1 text-center">
+                              <p className="text-xs text-gray-400">
+                                {table.capacity - table.guests.length} seat(s) open
+                              </p>
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <Card className="bg-blue-50 border-blue-200">
+              <CardContent className="p-3 flex items-center space-x-3">
+                <Zap className="w-4 h-4 text-blue-500" />
+                <p className="text-sm text-blue-700">
+                  <strong>Auto-assign:</strong> Click to automatically distribute unassigned guests across available seats based on meal preferences.
+                </p>
+                <Button size="sm" className="ml-auto bg-blue-500 text-white hover:bg-blue-600">
+                  Auto-Assign
+                </Button>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>

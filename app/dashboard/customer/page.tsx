@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -64,6 +66,7 @@ import {
   Grid,
   List,
   MoreHorizontal,
+  Globe,
 } from "lucide-react"
 
 export default function CustomerDashboardPage() {
@@ -162,10 +165,13 @@ export default function CustomerDashboardPage() {
   const menuItems = [
     { label: "Dashboard", href: "/dashboard/customer", icon: <TrendingUp className="w-4 h-4" />, active: true },
     { label: "Wedding Details", href: "/dashboard/customer/wedding", icon: <Heart className="w-4 h-4" /> },
+    { label: "Wedding Website", href: "/dashboard/customer/wedding-website", icon: <Globe className="w-4 h-4" /> },
     { label: "Budget", href: "/dashboard/customer/budget", icon: <DollarSign className="w-4 h-4" /> },
     { label: "Vendors", href: "/dashboard/customer/vendors", icon: <Users className="w-4 h-4" /> },
     { label: "Guest List", href: "/dashboard/customer/guests", icon: <Users className="w-4 h-4" /> },
     { label: "Timeline", href: "/dashboard/customer/timeline", icon: <Calendar className="w-4 h-4" /> },
+    { label: "Registry & Gifts", href: "/dashboard/customer/registry", icon: <Gift className="w-4 h-4" /> },
+    { label: "Inspiration", href: "/dashboard/customer/inspiration", icon: <Palette className="w-4 h-4" /> },
     { label: "Documents", href: "/dashboard/customer/documents", icon: <FileText className="w-4 h-4" /> },
     { label: "Messages", href: "/dashboard/customer/messages", icon: <MessageCircle className="w-4 h-4" /> },
   ]

@@ -1,12 +1,16 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout"
 import {
   Calendar,
@@ -155,10 +159,11 @@ export default function CustomerBudgetPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="categories">Categories</TabsTrigger>
             <TabsTrigger value="expenses">Expenses</TabsTrigger>
+            <TabsTrigger value="allocator">🧮 Auto-Allocator</TabsTrigger>
             <TabsTrigger value="tools">Tools</TabsTrigger>
           </TabsList>
 
@@ -298,6 +303,127 @@ export default function CustomerBudgetPage() {
                 </Card>
               ))}
             </div>
+          </TabsContent>
+
+          {/* Algorithmic Budget Allocator Tab */}
+          <TabsContent value="allocator" className="space-y-6">
+            <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+              <CardContent className="p-5">
+                <div className="flex items-start space-x-4">
+                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                    <Calculator className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-green-800">Algorithmic Budget Allocator</p>
+                    <p className="text-sm text-green-700 mt-1">
+                      Enter your total budget below, and our algorithm will automatically distribute it across all
+                      categories based on regional averages for weddings in your city.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-5 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Total Wedding Budget (₹)</Label>
+                    <Input type="number" placeholder="500000" defaultValue="500000" className="mt-1 text-lg font-bold" />
+                  </div>
+                  <div>
+                    <Label>Wedding City</Label>
+                    <Select defaultValue="mumbai">
+                      <SelectTrigger className="mt-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="mumbai">Mumbai</SelectItem>
+                        <SelectItem value="delhi">Delhi</SelectItem>
+                        <SelectItem value="bangalore">Bangalore</SelectItem>
+                        <SelectItem value="pune">Pune</SelectItem>
+                        <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                        <SelectItem value="chennai">Chennai</SelectItem>
+                        <SelectItem value="kolkata">Kolkata</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>Guest Count</Label>
+                    <Input type="number" placeholder="250" defaultValue="250" className="mt-1" />
+                  </div>
+                  <div>
+                    <Label>Wedding Style</Label>
+                    <Select defaultValue="traditional">
+                      <SelectTrigger className="mt-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="traditional">Traditional Indian</SelectItem>
+                        <SelectItem value="modern">Modern / Fusion</SelectItem>
+                        <SelectItem value="destination">Destination Wedding</SelectItem>
+                        <SelectItem value="intimate">Intimate (under 50 guests)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white">
+                  <Calculator className="w-4 h-4 mr-2" />
+                  Auto-Allocate Budget
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">Suggested Allocation (₹5,00,000 total)</CardTitle>
+                  <Badge className="bg-green-100 text-green-700">Mumbai Averages</Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  { category: "Venue & Catering", percentage: 40, amount: 200000, note: "Largest expense. Includes food & decoration." },
+                  { category: "Photography & Videography", percentage: 12, amount: 60000, note: "Memories last forever." },
+                  { category: "Bridal Attire & Jewellery", percentage: 10, amount: 50000, note: "Lehenga, accessories, jewellery." },
+                  { category: "Decoration & Florals", percentage: 10, amount: 50000, note: "Mandap, stage, centerpieces." },
+                  { category: "Music & Entertainment", percentage: 6, amount: 30000, note: "DJ, band, sangeet performances." },
+                  { category: "Makeup & Beauty", percentage: 6, amount: 30000, note: "Bridal makeup, hair styling." },
+                  { category: "Invitations & Stationery", percentage: 3, amount: 15000, note: "Cards, e-invites, favours." },
+                  { category: "Transportation", percentage: 4, amount: 20000, note: "Baraat, bridal car, guest transport." },
+                  { category: "Honeymoon Fund", percentage: 5, amount: 25000, note: "Starting your adventure together." },
+                  { category: "Contingency Buffer", percentage: 4, amount: 20000, note: "Always keep 5% for surprises." },
+                ].map((item) => (
+                  <div key={item.category} className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="font-medium text-gray-700">{item.category}</span>
+                          <span className="font-bold text-gray-800">₹{item.amount.toLocaleString()} ({item.percentage}%)</span>
+                        </div>
+                        <p className="text-xs text-gray-400">{item.note}</p>
+                      </div>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-2">
+                      <div
+                        className="bg-gradient-to-r from-green-400 to-emerald-500 h-2 rounded-full"
+                        style={{ width: `${item.percentage * 2.5}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+                <div className="pt-3 border-t flex space-x-3">
+                  <Button variant="outline" className="flex-1">
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Recalculate
+                  </Button>
+                  <Button className="flex-1 bg-pink-500 text-white hover:bg-pink-600">
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Apply This Budget
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="tools" className="space-y-6">

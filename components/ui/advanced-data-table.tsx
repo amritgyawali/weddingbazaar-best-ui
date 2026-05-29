@@ -44,6 +44,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { motion, AnimatePresence } from "motion/react"
 
 interface Column<T> {
   key: keyof T

@@ -22,6 +22,7 @@ import {
 } from "lucide-react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
+import { motion, AnimatePresence } from "motion/react"
 
 interface CommandItem {
   id: string

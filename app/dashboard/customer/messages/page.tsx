@@ -1,10 +1,13 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -289,8 +292,9 @@ export default function CustomerMessagesPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="inbox">Inbox</TabsTrigger>
+            <TabsTrigger value="bulk-inquiry">📨 Bulk Inquiry</TabsTrigger>
             <TabsTrigger value="chat">Live Chat</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
             <TabsTrigger value="tools">Tools</TabsTrigger>
@@ -426,6 +430,122 @@ export default function CustomerMessagesPage() {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          {/* Bulk Inquiry / Unified Inbox */}
+          <TabsContent value="bulk-inquiry" className="space-y-6">
+            <Card className="bg-gradient-to-r from-indigo-50 to-blue-50 border-indigo-200">
+              <CardContent className="p-4 flex items-start space-x-3">
+                <Send className="w-5 h-5 text-indigo-500 mt-0.5" />
+                <div>
+                  <p className="font-bold text-indigo-800">Send Simultaneous Inquiries</p>
+                  <p className="text-sm text-indigo-600 mt-0.5">
+                    Select multiple vendors and send a single template-based inquiry to all of them at once.
+                    Compare responses side-by-side in your inbox.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Select Vendors to Enquire</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  { name: "Capture Moments Studio", category: "Photographer", price: "₹80K–1.2L", rating: 4.9, selected: true },
+                  { name: "Royal Frames Photography", category: "Photographer", price: "₹70K–1.1L", rating: 4.8, selected: true },
+                  { name: "Lens & Light Co.", category: "Photographer", price: "₹60K–95K", rating: 4.7, selected: false },
+                  { name: "Click & Cherish", category: "Photographer", price: "₹50K–80K", rating: 4.6, selected: false },
+                ].map((vendor, i) => (
+                  <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        defaultChecked={vendor.selected}
+                        className="w-4 h-4 text-pink-500"
+                      />
+                      <div>
+                        <p className="font-medium text-sm">{vendor.name}</p>
+                        <p className="text-xs text-gray-500">{vendor.category} · {vendor.price} · ⭐ {vendor.rating}</p>
+                      </div>
+                    </div>
+                    <Badge className={vendor.selected ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-600"}>
+                      {vendor.selected ? "Selected" : "Select"}
+                    </Badge>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Inquiry Message</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div>
+                  <Label>Template</Label>
+                  <Select defaultValue="standard">
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="standard">Standard Inquiry</SelectItem>
+                      <SelectItem value="detailed">Detailed Inquiry (with event info)</SelectItem>
+                      <SelectItem value="brief">Brief Inquiry</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Message Preview</Label>
+                  <Textarea
+                    className="mt-1 text-sm"
+                    rows={5}
+                    defaultValue={`Hi,
+
+I'm looking for a [Category] for my wedding on December 15, 2024 at Royal Palace Hotel, Mumbai.
+
+Guest count: ~250 | Budget: ₹80,000–₹1,20,000
+
+Could you please share your availability, packages, and pricing?
+
+Thanks,
+Priya Sharma`}
+                  />
+                </div>
+                <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+                  <Send className="w-4 h-4 mr-2" />
+                  Send to 2 Selected Vendors
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Compare Responses</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { vendor: "Capture Moments Studio", responded: true, price: "₹95,000", availability: "✓ Available", rating: "⭐ 4.9", time: "2 hours ago" },
+                    { vendor: "Royal Frames Photography", responded: false, price: "—", availability: "Awaiting...", rating: "⭐ 4.8", time: "Sent 1 day ago" },
+                  ].map((r, i) => (
+                    <div key={i} className={`p-4 rounded-lg border ${r.responded ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200"}`}>
+                      <p className="font-semibold text-sm">{r.vendor}</p>
+                      <p className="text-xs text-gray-500 mt-1">{r.time}</p>
+                      <div className="mt-2 space-y-1 text-sm">
+                        <p>💰 {r.price}</p>
+                        <p>📅 {r.availability}</p>
+                        <p>{r.rating}</p>
+                      </div>
+                      {r.responded && (
+                        <Button size="sm" variant="outline" className="mt-2 w-full">View Response</Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="chat" className="space-y-6">

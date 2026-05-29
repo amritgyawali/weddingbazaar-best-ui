@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -316,9 +318,10 @@ export default function CustomerTimelinePage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="timeline">Timeline View</TabsTrigger>
             <TabsTrigger value="tasks">Task List</TabsTrigger>
+            <TabsTrigger value="generator">⚡ Auto-Generator</TabsTrigger>
             <TabsTrigger value="milestones">Milestones</TabsTrigger>
             <TabsTrigger value="tools">Tools</TabsTrigger>
           </TabsList>
@@ -459,6 +462,108 @@ export default function CustomerTimelinePage() {
                 </Card>
               ))}
             </div>
+          </TabsContent>
+
+          {/* Dynamic Timeline Generator Tab */}
+          <TabsContent value="generator" className="space-y-6">
+            <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+              <CardContent className="p-5">
+                <div className="flex items-start space-x-4">
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Zap className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-blue-800">Dynamic Timeline Generator</p>
+                    <p className="text-sm text-blue-700 mt-1">
+                      Enter your wedding date, and we'll auto-generate a complete checklist with deadlines — based on
+                      industry best practices (e.g., "Book photographer 9 months out").
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-5 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Wedding Date</Label>
+                    <Input type="date" defaultValue="2024-12-15" className="mt-1" />
+                  </div>
+                  <div>
+                    <Label>Wedding Style</Label>
+                    <Select defaultValue="traditional">
+                      <SelectTrigger className="mt-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="traditional">Traditional Indian</SelectItem>
+                        <SelectItem value="modern">Modern / Fusion</SelectItem>
+                        <SelectItem value="destination">Destination Wedding</SelectItem>
+                        <SelectItem value="intimate">Intimate Ceremony</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <Button className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+                  <Zap className="w-4 h-4 mr-2" />
+                  Generate My Timeline
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Generated Timeline — Wedding: Dec 15, 2024</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  { timeframe: "12+ months before", tasks: ["Set overall budget", "Decide wedding style", "Create guest list draft"], status: "done" },
+                  { timeframe: "9–12 months before", tasks: ["Book ceremony & reception venue", "Book photographer & videographer", "Hire wedding planner (optional)"], status: "done" },
+                  { timeframe: "6–9 months before", tasks: ["Send save-the-dates", "Book caterer", "Book DJ / band", "Choose wedding party"], status: "done" },
+                  { timeframe: "4–6 months before", tasks: ["Shop for wedding attire", "Book florist & decorator", "Plan honeymoon"], status: "in-progress" },
+                  { timeframe: "2–4 months before", tasks: ["Send formal invitations", "Finalize menu", "Book makeup artist", "Order wedding cake"], status: "upcoming" },
+                  { timeframe: "1–2 months before", tasks: ["Confirm vendor details", "Create seating chart", "Final dress fitting"], status: "upcoming" },
+                  { timeframe: "1–2 weeks before", tasks: ["Deliver final guest list to caterer", "Break-in wedding shoes", "Prepare vendor payments"], status: "upcoming" },
+                  { timeframe: "Wedding week", tasks: ["Confirm transport", "Distribute vendor payments", "Rehearsal dinner"], status: "upcoming" },
+                ].map((phase) => (
+                  <div key={phase.timeframe} className="border rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="font-semibold text-sm text-gray-700">{phase.timeframe}</p>
+                      <Badge
+                        className={
+                          phase.status === "done"
+                            ? "bg-green-100 text-green-700"
+                            : phase.status === "in-progress"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-gray-100 text-gray-600"
+                        }
+                      >
+                        {phase.status === "done" ? "✓ Complete" : phase.status === "in-progress" ? "In Progress" : "Upcoming"}
+                      </Badge>
+                    </div>
+                    <ul className="space-y-1">
+                      {phase.tasks.map((task) => (
+                        <li key={task} className="flex items-center space-x-2 text-sm">
+                          <CheckCircle
+                            className={`w-3 h-3 flex-shrink-0 ${
+                              phase.status === "done" ? "text-green-500" : "text-gray-300"
+                            }`}
+                          />
+                          <span className={phase.status === "done" ? "line-through text-gray-400" : "text-gray-600"}>
+                            {task}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                <Button className="w-full bg-pink-500 text-white hover:bg-pink-600">
+                  <Save className="w-4 h-4 mr-2" />
+                  Apply This Timeline to My Dashboard
+                </Button>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="milestones" className="space-y-6">

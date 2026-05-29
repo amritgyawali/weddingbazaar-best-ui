@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -139,6 +141,9 @@ export default function VendorDashboardPage() {
     { label: "Dashboard", href: "/dashboard/vendor", icon: <TrendingUp className="w-4 h-4" />, active: true },
     { label: "Bookings", href: "/dashboard/vendor/bookings", icon: <Calendar className="w-4 h-4" /> },
     { label: "Inquiries", href: "/dashboard/vendor/inquiries", icon: <MessageCircle className="w-4 h-4" /> },
+    { label: "Contracts", href: "/dashboard/vendor/contracts", icon: <FileText className="w-4 h-4" /> },
+    { label: "Calendar", href: "/dashboard/vendor/calendar", icon: <Calendar className="w-4 h-4" /> },
+    { label: "Templates", href: "/dashboard/vendor/templates", icon: <Settings className="w-4 h-4" /> },
     { label: "Portfolio", href: "/dashboard/vendor/portfolio", icon: <Camera className="w-4 h-4" /> },
     { label: "Analytics", href: "/dashboard/vendor/analytics", icon: <BarChart3 className="w-4 h-4" /> },
     { label: "Payments", href: "/dashboard/vendor/payments", icon: <DollarSign className="w-4 h-4" /> },

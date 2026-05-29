@@ -25,6 +25,7 @@ import {
   ArrowRight,
   Play,
   CheckCircle,
+  X,
 } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
@@ -34,27 +35,27 @@ import { useRouter } from "next/navigation"
 // Import the SearchBarClient component with SSR disabled
 const SearchBarClient = dynamic(() => import("@/components/search-bar-client"), { ssr: false })
 
+// Fixed particle positions to avoid hydration mismatch
+const PARTICLES = [
+  { left: "10%", top: "20%", delay: "0s", duration: "2s" },
+  { left: "25%", top: "60%", delay: "0.5s", duration: "2.5s" },
+  { left: "45%", top: "15%", delay: "1s", duration: "3s" },
+  { left: "65%", top: "75%", delay: "1.5s", duration: "2s" },
+  { left: "80%", top: "35%", delay: "2s", duration: "2.8s" },
+  { left: "90%", top: "55%", delay: "0.3s", duration: "2.2s" },
+]
+
 export default function EnhancedWeddingBazaarHomePage() {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeCategory, setActiveCategory] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
     }
     window.addEventListener("scroll", handleScroll)
-
-    // Simulate loading
-    setTimeout(() => setIsLoading(false), 1500)
-
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
@@ -133,34 +134,6 @@ export default function EnhancedWeddingBazaarHomePage() {
     },
   ]
 
-  function LoadingScreen() {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center mb-6 mx-auto animate-pulse">
-            <Heart className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-4">
-            WeddingBazaar
-          </h2>
-          <div className="flex space-x-2 justify-center">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <div
-                key={i}
-                className="w-2 h-2 bg-pink-500 rounded-full animate-bounce"
-                style={{ animationDelay: `${i * 0.2}s` }}
-              ></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (isLoading) {
-    return <LoadingScreen />
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-rose-50">
       {/* Enhanced Header */}
@@ -189,6 +162,7 @@ export default function EnhancedWeddingBazaarHomePage() {
                 {[
                   { name: "Home", href: "/" },
                   { name: "Vendors", href: "/vendors" },
+                  { name: "Style Quiz", href: "/recommendations" },
                   { name: "Real Weddings", href: "/real-weddings" },
                   { name: "Blog", href: "/blog" },
                   { name: "E-Invites", href: "/e-invites" },
@@ -242,6 +216,7 @@ export default function EnhancedWeddingBazaarHomePage() {
             {[
               { name: "Home", href: "/" },
               { name: "Vendors", href: "/vendors" },
+              { name: "Style Quiz", href: "/recommendations" },
               { name: "Real Weddings", href: "/real-weddings" },
               { name: "Blog", href: "/blog" },
               { name: "E-Invites", href: "/e-invites" },
@@ -275,15 +250,15 @@ export default function EnhancedWeddingBazaarHomePage() {
 
         {/* Floating elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {Array.from({ length: 6 }).map((_, i) => (
+          {PARTICLES.map((p, i) => (
             <div
               key={i}
-              className={`absolute w-2 h-2 bg-white/20 rounded-full animate-pulse`}
+              className="absolute w-2 h-2 bg-white/20 rounded-full animate-pulse"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${i * 0.5}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
+                left: p.left,
+                top: p.top,
+                animationDelay: p.delay,
+                animationDuration: p.duration,
               }}
             ></div>
           ))}
@@ -471,7 +446,7 @@ export default function EnhancedWeddingBazaarHomePage() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault()
-                  router.push("/planning-tool")
+                  router.push("/recommendations")
                 }}
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -585,7 +560,7 @@ export default function EnhancedWeddingBazaarHomePage() {
             ))}
           </div>
 
-          <div className="text-center">
+          <div className="text-center flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
               className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white px-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
@@ -593,6 +568,14 @@ export default function EnhancedWeddingBazaarHomePage() {
             >
               Explore All Vendors
               <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-pink-200 text-pink-600 hover:bg-pink-50 px-8 transition-all duration-300"
+              onClick={() => router.push("/compare")}
+            >
+              Compare Vendors
             </Button>
           </div>
         </div>
@@ -933,6 +916,8 @@ export default function EnhancedWeddingBazaarHomePage() {
               <ul className="space-y-4">
                 {[
                   { name: "Find Vendors", href: "/vendors" },
+                  { name: "Compare Vendors", href: "/compare" },
+                  { name: "Style Quiz", href: "/recommendations" },
                   { name: "Real Weddings", href: "/real-weddings" },
                   { name: "Wedding Planning", href: "/planning-tool" },
                   { name: "E-Invites", href: "/e-invites" },

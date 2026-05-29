@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = "force-dynamic"
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -126,6 +128,7 @@ import {
   CalendarHeart,
   CalendarRange,
   CalendarSearch,
+  Brain,
 } from "lucide-react"
 
 export default function AdminDashboardPage() {
@@ -229,6 +232,9 @@ export default function AdminDashboardPage() {
     { label: "Users", href: "/dashboard/admin/users", icon: <Users className="w-4 h-4" /> },
     { label: "Vendors", href: "/dashboard/admin/vendors", icon: <Building className="w-4 h-4" /> },
     { label: "Analytics", href: "/dashboard/admin/analytics", icon: <BarChart3 className="w-4 h-4" /> },
+    { label: "Matchmaking", href: "/dashboard/admin/matchmaking", icon: <Brain className="w-4 h-4" /> },
+    { label: "Monetization", href: "/dashboard/admin/monetization", icon: <DollarSign className="w-4 h-4" /> },
+    { label: "Trust & Safety", href: "/dashboard/admin/trust-safety", icon: <Shield className="w-4 h-4" /> },
     { label: "Finance", href: "/dashboard/admin/finance", icon: <DollarSign className="w-4 h-4" /> },
     { label: "Support", href: "/dashboard/admin/support", icon: <MessageCircle className="w-4 h-4" /> },
     { label: "System", href: "/dashboard/admin/system", icon: <Server className="w-4 h-4" /> },
